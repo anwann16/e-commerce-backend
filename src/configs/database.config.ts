@@ -12,8 +12,8 @@ export default registerAs(
     database: process.env.DB_NAME,
 
     autoLoadEntities: true,
-    synchronize: process.env.DB_SYNC === 'true',
-    logging: process.env.DB_LOGGING === 'true',
+    synchronize: true,
+    logging: false,
 
     migrationsTableName: 'migrations',
     migrations: ['dist/database/migrations/*.js'],
