@@ -1,6 +1,8 @@
 import * as bcrypt from 'bcrypt';
+import { NotFoundException } from '@nestjs/common';
 import { ConflictException, Injectable } from '@nestjs/common';
 
+import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/request/create-user.dto';
 import { UserRepository } from './repositories/user.repository';
 import { UserResponseDto } from './dto/response/user-response.dto';
@@ -10,17 +12,6 @@ export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
   private readonly SALT_ROUNDS = 10;
-
-  private async hashPassword(password: string): Promise<string> {
-    return bcrypt.hash(password, this.SALT_ROUNDS);
-  }
-
-  private async comparePassword(
-    plainPassword: string,
-    hashPassword: string,
-  ): Promise<boolean> {
-    return bcrypt.compare(plainPassword, hashPassword);
-  }
 
   async createUser(request: CreateUserDto): Promise<UserResponseDto> {
     // Check if user Already exists
@@ -40,14 +31,27 @@ export class UserService {
 
     return user;
   }
-}
-// findAll() {
-//   return `This action returns all users`;
-// }
 
-// findOne(id: number) {
-//   return `This action returns a #${id} user`;
-// }
+  async findByEmail(email: string): Promise<User> {
+    const user = await this.userRepository.findByEmail(email);
+
+    console.log(user);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
+  }
+
+  // findAll() {
+  //   return `This action returns all users`;
+  // }
+
+  private async hashPassword(password: string): Promise<string> {
+    return bcrypt.hash(password, this.SALT_ROUNDS);
+  }
+}
 
 // update(id: number, updateUserDto: UpdateUserDto) {
 //   return `This action updates a #${id} user`;
