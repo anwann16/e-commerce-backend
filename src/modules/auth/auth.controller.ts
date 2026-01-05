@@ -1,27 +1,18 @@
-import {
-  Controller,
-  // Get,
-  Post,
-  Body,
-  HttpStatus,
-  Get,
-  UseGuards,
-  // Patch,
-  // Param,
-  // Delete,
-} from '@nestjs/common';
+import { Controller, Post, Body, HttpStatus, Get } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
 import { LoginDto } from './entities/login.dto';
+import { Public } from './decorators/public.decorator';
+import { CurrentUser } from './decorators/current-user.decorator';
 import { CreateUserDto } from '../users/dto/request/create-user.dto';
 import { BaseResponseDto, ResponseHelper } from '../../common/responses';
 import { UserResponseDto } from '../users/dto/response/user-response.dto';
-import { JwtGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Public()
   @Post('/register')
   async register(
     @Body() request: CreateUserDto,
@@ -34,6 +25,7 @@ export class AuthController {
     );
   }
 
+  @Public()
   @Post('/login')
   async login(
     @Body() request: LoginDto,
@@ -47,24 +39,14 @@ export class AuthController {
     );
   }
 
-  @UseGuards(JwtGuard)
-  @Get('/tes')
-  findAll() {
-    return 'This action returns all auth';
+  @Get('/me')
+  async currentUser(
+    @CurrentUser() user: UserResponseDto,
+  ): Promise<BaseResponseDto<UserResponseDto>> {
+    return ResponseHelper.success(
+      user,
+      'Current user fetched successfully',
+      HttpStatus.OK,
+    );
   }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.authService.findOne(+id);
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-  //   return this.authService.update(+id, updateAuthDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.authService.remove(+id);
-  // }
 }

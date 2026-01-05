@@ -20,8 +20,8 @@ export class User {
   @Column({ unique: true, nullable: false })
   email: string;
 
-  @Column({ nullable: false })
   @Exclude()
+  @Column({ nullable: false })
   password: string;
 
   @Column({

@@ -24,4 +24,17 @@ export class UserRepository {
   async findByEmail(email: string): Promise<User | null> {
     return this.userRepository.findOne({ where: { email } });
   }
+
+  async findAll(
+    page: number,
+    limit: number,
+  ): Promise<{ data: UserResponseDto[]; total: number }> {
+    const skip = (page - 1) * limit;
+    const [data, total] = await this.userRepository.findAndCount({
+      skip,
+      take: limit,
+    });
+
+    return { data, total };
+  }
 }

@@ -44,9 +44,12 @@ export class UserService {
     return user;
   }
 
-  // findAll() {
-  //   return `This action returns all users`;
-  // }
+  async findAll(
+    page: number,
+    limit: number,
+  ): Promise<{ data: UserResponseDto[]; total: number }> {
+    return await this.userRepository.findAll(page, limit);
+  }
 
   private async hashPassword(password: string): Promise<string> {
     return bcrypt.hash(password, this.SALT_ROUNDS);
@@ -54,7 +57,7 @@ export class UserService {
 }
 
 // update(id: number, updateUserDto: UpdateUserDto) {
-//   return `This action updates a #${id} user`;
+//   return `This action updates a #$ser`;
 // }
 
 // remove(id: number) {
