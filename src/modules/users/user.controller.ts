@@ -4,15 +4,14 @@ import {
   Post,
   Body,
   Param,
-  UseGuards,
-  // Patch,
-  // Param,
-  // Delete,
+  Patch,
+  Delete,
 } from '@nestjs/common';
 
 import { UserService } from './user.service';
 import { Role } from 'src/common/enums/role.enum';
 import { Roles } from '../auth/decorators/roles.decorator';
+import { UpdateUserDto } from './dto/request/update-user.dto';
 import { CreateUserDto } from './dto/request/create-user.dto';
 import { UserResponseDto } from './dto/response/user-response.dto';
 import { BaseResponseDto, ResponseHelper } from 'src/common/responses';
@@ -53,13 +52,19 @@ export class UserController {
     return ResponseHelper.success(user, 'User retrieved successfully');
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-  //   return this.usersService.update(+id, updateUserDto);
-  // }
+  @Patch(':id')
+  async updateProfile(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<BaseResponseDto<UserResponseDto>> {
+    const updatedUser = await this.userService.updateById(id, updateUserDto);
+    return ResponseHelper.success(updatedUser, 'User updated successfully');
+  }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.usersService.remove(+id);
-  // }
+  @Roles(Role.ADMIN)
+  @Delete(':id')
+  async delete(@Param('id') id: string): Promise<BaseResponseDto<null>> {
+    await this.userService.deleteById(id);
+    return ResponseHelper.success(null, 'User deleted successfully');
+  }
 }

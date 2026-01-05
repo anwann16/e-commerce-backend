@@ -4,6 +4,7 @@ import { ConflictException, Injectable } from '@nestjs/common';
 
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/request/create-user.dto';
+import { UpdateUserDto } from './dto/request/update-user.dto';
 import { UserRepository } from './repositories/user.repository';
 import { UserResponseDto } from './dto/response/user-response.dto';
 
@@ -35,8 +36,6 @@ export class UserService {
   async findByEmail(email: string): Promise<User> {
     const user = await this.userRepository.findByEmail(email);
 
-    console.log(user);
-
     if (!user) {
       throw new NotFoundException('User not found');
     }
@@ -64,12 +63,19 @@ export class UserService {
   private async hashPassword(password: string): Promise<string> {
     return bcrypt.hash(password, this.SALT_ROUNDS);
   }
+
+  async deleteById(id: string): Promise<void> {
+    await this.userRepository.deleteById(id);
+  }
+
+  async updateById(
+    id: string,
+    updateData: UpdateUserDto,
+  ): Promise<UserResponseDto> {
+    return await this.userRepository.updateById(id, updateData);
+  }
 }
 
 // update(id: number, updateUserDto: UpdateUserDto) {
 //   return `This action updates a #$ser`;
-// }
-
-// remove(id: number) {
-//   return `This action removes a #${id} user`;
 // }

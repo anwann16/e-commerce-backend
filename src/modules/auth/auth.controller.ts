@@ -31,7 +31,6 @@ export class AuthController {
     @Body() request: LoginDto,
   ): Promise<BaseResponseDto<{ accessToken: string }>> {
     const loginResponse = await this.authService.login(request);
-    console.log(request);
     return ResponseHelper.success(
       loginResponse,
       'User logged in successfully',
