@@ -25,6 +25,10 @@ export class UserRepository {
     return this.userRepository.findOne({ where: { email } });
   }
 
+  async findById(id: string): Promise<UserResponseDto | null> {
+    return await this.userRepository.findOne({ where: { id } });
+  }
+
   async findAll(
     page: number,
     limit: number,

@@ -27,7 +27,7 @@ export class UserController {
     return user;
   }
 
-  @Roles(Role.USER)
+  @Roles(Role.ADMIN)
   @Get()
   async findAll(
     @Param('page') page = '1',
@@ -43,10 +43,15 @@ export class UserController {
     return ResponseHelper.list(data, total, pageNumber, limitNumber);
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.usersService.findOne(+id);
-  // }
+  @Roles(Role.ADMIN)
+  @Get(':id')
+  async findOne(
+    @Param('id') id: string,
+  ): Promise<BaseResponseDto<UserResponseDto>> {
+    const user = await this.userService.findById(id);
+
+    return ResponseHelper.success(user, 'User retrieved successfully');
+  }
 
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {

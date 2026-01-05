@@ -44,6 +44,16 @@ export class UserService {
     return user;
   }
 
+  async findById(id: string): Promise<UserResponseDto> {
+    const userFound = await this.userRepository.findById(id);
+
+    if (!userFound) {
+      throw new NotFoundException('User not found');
+    }
+
+    return userFound;
+  }
+
   async findAll(
     page: number,
     limit: number,
