@@ -7,9 +7,8 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/users/user.module';
 import { AppLogger } from './common/logger/logger.service';
 import databaseConfig from './configs/database/database.config';
+import { CategoryModule } from './modules/categories/category.module';
 import { DatabaseService } from './configs/database/database.service';
-import { AdminSeed } from './common/seeds/admin.seed';
-import { User } from './modules/users/entities/user.entity';
 
 @Module({
   imports: [
@@ -23,8 +22,6 @@ import { User } from './modules/users/entities/user.entity';
       useFactory: (config: ConfigService) =>
         config.getOrThrow<TypeOrmModuleOptions>('database'),
     }),
-
-    TypeOrmModule.forFeature([User]),
 
     LoggerModule.forRoot({
       pinoHttp: {
@@ -40,8 +37,9 @@ import { User } from './modules/users/entities/user.entity';
 
     UserModule,
     AuthModule,
+    CategoryModule,
   ],
   controllers: [],
-  providers: [DatabaseService, AppLogger, AdminSeed],
+  providers: [DatabaseService, AppLogger],
 })
 export class AppModule {}
