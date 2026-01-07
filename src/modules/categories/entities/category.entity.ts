@@ -3,11 +3,10 @@ import {
   Entity,
   CreateDateColumn,
   PrimaryGeneratedColumn,
-  BeforeInsert,
-  BeforeUpdate,
+  OneToMany,
 } from 'typeorm';
 
-import { generateSlug } from 'src/common/utils/slug.utils';
+import { Product } from 'src/modules/products/entities/product.entity';
 
 @Entity('categories')
 export class Category {
@@ -20,17 +19,12 @@ export class Category {
   @Column({ unique: true })
   slug: string;
 
+  @OneToMany(() => Product, (product) => product.category)
+  products: Product[];
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
   @CreateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
-
-  @BeforeInsert()
-  @BeforeUpdate()
-  automateSlug() {
-    if (this.name) {
-      this.slug = generateSlug(this.name);
-    }
-  }
 }

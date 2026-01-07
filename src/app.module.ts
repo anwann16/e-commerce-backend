@@ -9,6 +9,7 @@ import { AppLogger } from './common/logger/logger.service';
 import databaseConfig from './configs/database/database.config';
 import { CategoryModule } from './modules/categories/category.module';
 import { DatabaseService } from './configs/database/database.service';
+import { ProductsModule } from './modules/products/products.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { DatabaseService } from './configs/database/database.service';
     UserModule,
     AuthModule,
     CategoryModule,
+    ProductsModule,
   ],
   controllers: [],
   providers: [DatabaseService, AppLogger],
