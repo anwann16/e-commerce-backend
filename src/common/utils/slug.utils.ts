@@ -1,3 +1,5 @@
+import { randomBytes } from 'crypto';
+
 export const generateSlug = (text: string): string => {
   return text
     .toLowerCase()
@@ -6,3 +8,9 @@ export const generateSlug = (text: string): string => {
     .replace(/[\s-]+/g, '-') // ganti spasi/strip beruntun jadi satu strip
     .replace(/^-+|-+$/g, ''); // hapus strip di awal/akhir
 };
+
+export function generateRandomId(length = 12): string {
+  return randomBytes(Math.ceil(length / 2))
+    .toString('hex')
+    .substring(0, length);
+}

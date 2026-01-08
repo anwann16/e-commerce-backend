@@ -19,7 +19,10 @@ export class Category {
   @Column({ unique: true })
   slug: string;
 
-  @OneToMany(() => Product, (product) => product.category)
+  @OneToMany(() => Product, (product) => product.category, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   products: Product[];
 
   @CreateDateColumn({ name: 'created_at' })

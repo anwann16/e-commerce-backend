@@ -21,7 +21,9 @@ export class CategoryRepository {
   }
 
   async findAll(): Promise<CategoryResponseDto[]> {
-    return this.categoryRepository.find();
+    return this.categoryRepository.find({
+      relations: ['products'],
+    });
   }
 
   async findByNameOrSlug(

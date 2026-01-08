@@ -29,7 +29,9 @@ export class Product {
   @Column({ type: 'int', default: 0 })
   stock: number;
 
-  @ManyToOne(() => Category, (category) => category.products)
+  @ManyToOne(() => Category, (category) => category.products, {
+    onDelete: 'CASCADE',
+  })
   category: Category;
 
   @OneToMany(() => ProductImage, (image) => image.product, {

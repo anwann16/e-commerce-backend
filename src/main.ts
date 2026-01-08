@@ -1,5 +1,7 @@
 import { NestFactory, Reflector } from '@nestjs/core';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 import { AppModule } from './app.module';
 
@@ -15,6 +17,11 @@ async function bootstrap() {
 
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
-  await app.listen(process.env.PORT ?? 3000);
+  app.enableCors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  });
+
+  await app.listen(3002);
 }
 bootstrap();

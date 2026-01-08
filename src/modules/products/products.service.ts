@@ -9,7 +9,7 @@ import { Product } from './entities/product.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ProductImage } from './entities/product-images.entity';
-import { generateSlug } from 'src/common/utils/slug.utils';
+import { generateRandomId, generateSlug } from 'src/common/utils/slug.utils';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @Injectable()
@@ -30,13 +30,14 @@ export class ProductsService {
       where: { slug: newSlug },
     });
 
+    let slugUpdated;
     if (slugExist) {
-      throw new ConflictException('Slug already exist');
+      slugUpdated = `${newSlug}-${generateRandomId(7)}`;
     }
 
     const product = this.productRepository.create({
       name,
-      slug: newSlug,
+      slug: slugUpdated,
       description,
       stock,
       price,
@@ -157,7 +158,7 @@ export class ProductsService {
     let slugUpdated;
     if (name === product.name) {
       const tempSlug = generateSlug(name);
-      slugUpdated = `${tempSlug}-${product.id}`;
+      slugUpdated = `${tempSlug}-${generateRandomId(7)}`;
     }
 
     if (name && name !== product.name) {
